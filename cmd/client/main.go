@@ -9,7 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	pb "github.com/Tony36051/go-file-agent/generated/go/file_transfer"
+	pb "github.com/Tony36051/go-file-agent/generated/go/file_transfer/api/v1"
 )
 
 func main() {
