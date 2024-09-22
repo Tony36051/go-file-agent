@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "github.com/Tony36051/go-file-agent/generated/go/file_transfer";
+
+package filetransfer;
+
+message FilePathRequest {
+    string file_path = 1;
+}
+
+message FileChunk {
+    bytes data = 1;
+    int32 chunk_number = 2;
+    string file_name = 3;
+}
+
+service FileService {
+    rpc RequestFile(FilePathRequest) returns (stream FileChunk);
+}
