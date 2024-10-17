@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -13,7 +14,11 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost:6565", grpc.WithInsecure())
+	addr := flag.String("addr", "127.0.0.1:6565", "the server address")
+	filePath := flag.String("file", "path/to/your/file", "the file path to request")
+	flag.Parse()
+
+	conn, err := grpc.Dial(*addr, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -21,15 +26,14 @@ func main() {
 
 	client := pb.NewFileServiceClient(conn)
 
-	filePath := "path/to/your/file"
-	request := &pb.FilePathRequest{FilePath: filePath}
+	request := &pb.FilePathRequest{FilePath: *filePath}
 
 	stream, err := client.RequestFile(context.Background(), request)
 	if err != nil {
 		log.Fatalf("could not request file: %v", err)
 	}
 
-	outputFile, err := os.Create("output_" + filePath)
+	outputFile, err := os.Create("output_" + *filePath)
 	if err != nil {
 		log.Fatalf("could not create output file: %v", err)
 	}
